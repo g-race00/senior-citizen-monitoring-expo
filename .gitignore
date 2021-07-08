@@ -1,13 +1,25 @@
-node_modules/
+
+#expo
 .expo/
+web-build/
+
+#node 
+node_modules/
 npm-debug.*
+package-lock.json
+
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
 
 # macOS
 .DS_Store
+
+# aws config
+src/aws/api.js
+
+# firebase config
+src/firebase/firebaseConfig.js
