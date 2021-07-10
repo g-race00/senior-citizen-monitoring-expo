@@ -1,6 +1,6 @@
 import React, { useContext, useState, useMemo, useEffect, useRef } from 'react'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
-import { AlertScreen, HistoryScreen, CreateScreen, EditScreen, EmptyScreen, IndexScreen } from './index';
+import { AlertScreen, CreateScreen, EditScreen, EmptyScreen, IndexScreen } from './index';
 import { View, TouchableOpacity} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -82,30 +82,24 @@ function Home({ navigation }) {
 function Alert({navigation}) {
     return (
         <Stack.Navigator screenOptions={screenOptions}>
-            <Stack.Screen name="Alert" component={AlertScreen} />
-        </Stack.Navigator>
-    )
-}
-
-function History({navigation}) {
-    return (
-        <Stack.Navigator screenOptions={screenOptions}>
-            <Stack.Screen name="History" component={HistoryScreen} options={{ headerTitle: "Location History"}} />
+            <Stack.Screen name="Alert" component={AlertScreen} options={{ headerTitle: "Alert History"}}/>
         </Stack.Navigator>
     )
 }
 
 export default function MainScreen(props) {
+    const { signOut } = useContext(AuthContext);
     const [ user, setUser ] = useState(props.extraData);
-    // const [notification, setNotification] = useState(false);
-    // const notificationListener = useRef();
+    
+    const notificationListener = useRef();
     const responseListener = useRef();
-    console.log('Main Start')
-    console.log(user)
-    console.log('Main End')
+
+    const onLogoutPress = () => {
+        signOut(); 
+    }
 
     const userContext = useMemo( () => (user,{
-        user,
+        user, setUser,
         updateUserInfo: async data => {
             let params = {
                 userId: user.id,
@@ -143,13 +137,13 @@ export default function MainScreen(props) {
               };
           
             await fetch(awsDbAPI.userCreate, {
-            credentials: 'include',
-            method: 'POST', 
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params)
+                credentials: 'include',
+                method: 'POST', 
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
             }).then((response) => response.json())
             .then((json) => {
                 user.info = json.info
@@ -168,13 +162,13 @@ export default function MainScreen(props) {
               };
           
             await fetch(awsDbAPI.userUpdate + user.id, {
-            credentials: 'include',
-            method: 'POST', 
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params)
+                credentials: 'include',
+                method: 'POST', 
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
             }).then((response) => response.json())
             .then((json) => {
                 console.log('updated')
@@ -210,32 +204,48 @@ export default function MainScreen(props) {
 
     useEffect(()=>{
         checkUser();
+        if(!('notif' in user)){
+            user.notif = {
+                "fall": "",
+                "sos": ""
+            };
+            setUser({ ...user })
+        }
         // This listener is fired whenever a notification is received while the app is foregrounded
-        // notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-        //     // console.log(notification);
-        //     setNotification(notification);
-        // });
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            const data = notification.request.content.data;
+            if('alert' in data){
+                if(data.alert == "fall"){
+                    user.notif.fall = data;
+                } else {
+                    user.notif.sos = data;
+                }
+                setUser({ ...user})
+            }
+        });
     
         // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             // console.log(response.json());
             const data = response.notification.request.content.data;
             if('alert' in data){
-                props.navigation.navigate('Alert')
+                if(data.alert == "fall"){
+                    user.notif.fall = data;
+                } else {
+                    user.notif.sos = data;
+                }
+                setUser({ ...user})
+                props.navigation.navigate('Home')
             }
         });
         
         return () => {
-            // Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(notificationListener.current);
             Notifications.removeNotificationSubscription(responseListener.current);
         }
     }, [])
 
-    const { signOut } = useContext(AuthContext);
-
-    const onLogoutPress = () => {
-        signOut(); 
-    }
+    
 
     function CustomDrawerContent(props) {
         return (
@@ -274,6 +284,7 @@ export default function MainScreen(props) {
         <UserContext.Provider value={userContext}>
             <Drawer.Navigator 
                 initialRouteName="Home"
+                // initialRouteName="Alert" //Tempt
                 drawerContent={props => <CustomDrawerContent {...props} />}
                 drawerContentOptions={{
                     activeTintColor: '#e91e63',
@@ -292,16 +303,8 @@ export default function MainScreen(props) {
                         options={{
                             drawerIcon: ({focused, color, size}) => (
                                 <Ionicons size={20} color={color} name={focused ? 'alert-circle' : 'alert-circle-outline'} />
-                            )
-                        }}
-                    />
-                ):(<></>)}
-                { user.info !== null && user.info !== "" ? (
-                    <Drawer.Screen name="History" component={History} 
-                        options={{
-                            drawerIcon: ({focused, color, size}) => (
-                                <Ionicons size={20} color={color} name={focused ? 'person' : 'person-outline'} />
-                            )
+                            ), 
+                            title: "Alert History"
                         }}
                     />
                 ):(<></>)}

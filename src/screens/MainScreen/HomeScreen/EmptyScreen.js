@@ -12,7 +12,7 @@ export default function EmptyScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-                <Ionicons name="podium" color="#788eec" size={65} />
+                <Ionicons name="stats-chart" color="#788eec" size={65} />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.msgText}>
@@ -21,8 +21,8 @@ export default function EmptyScreen({ navigation }) {
                     Please add target and location! 
                 </Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
-                <Text style={styles.buttonText}>Add</Text>
+            <TouchableOpacity style={styles.bottomButton} onPress={onAddButtonPress}>
+                <Ionicons name="add" color="white" size={25} />
             </TouchableOpacity>
         </View>
     )

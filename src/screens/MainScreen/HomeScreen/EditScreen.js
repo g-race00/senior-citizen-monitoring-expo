@@ -3,7 +3,6 @@ import { Image, Text, TextInput, TouchableOpacity, View, Alert } from 'react-nat
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../../../styles/create';
-import { awsDbAPI } from '../../../aws/api'
 import { UserContext } from '../../../context/UserContext'
 
 export default function EditScreen({ navigation }) {

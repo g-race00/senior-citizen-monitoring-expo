@@ -1,5 +1,4 @@
 export { default as AlertScreen } from './AlertScreen/AlertScreen'
-export { default as HistoryScreen } from './HistoryScreen/HistoryScreen'
 export { default as CreateScreen } from './HomeScreen/CreateScreen'
 export { default as EditScreen } from './HomeScreen/EditScreen'
 export { default as IndexScreen } from './HomeScreen/IndexScreen'

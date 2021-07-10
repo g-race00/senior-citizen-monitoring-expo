@@ -12,6 +12,7 @@ export default StyleSheet.create({
         marginTop: 120,
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 10,
     },
     textContainer: {
         flexDirection: 'row',
@@ -26,16 +27,20 @@ export default StyleSheet.create({
         color: "grey",
         textAlign: 'center',
     },
-    button: {
-        height: 47,
-        borderRadius: 5,
-        backgroundColor: '#788eec',
-        width: 80,
-        alignItems: "center",
-        justifyContent: 'center'
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16
+    bottomButton: {
+        flex: 1,
+        flexDirection:'row',
+        position:'absolute',
+        bottom: 20,
+        right: 20,
+        width: 60,
+        height: 60,
+        alignSelf: "center",
+        justifyContent: "center",
+        alignItems: 'center',
+        backgroundColor: "#5C6BC0",
+        borderRadius: 60,
+        shadowOpacity: 0.5,
+        shadowRadius: 1
     },
 })

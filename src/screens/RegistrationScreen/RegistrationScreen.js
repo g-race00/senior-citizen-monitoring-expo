@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AuthContext } from '../../context/AuthContext'
-import styles from '../../styles/registration';
+import styles from '../../styles/login';
 
 export default function RegistrationScreen({navigation}) {
     const [fullName, setFullName] = useState('')

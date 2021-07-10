@@ -6,8 +6,19 @@ export default StyleSheet.create({
         marginTop: 100,
         alignItems: 'center'
     },
-    title: {
-
+    headerView: {
+        flex: 1,
+        alignItems: "center",
+    },
+    headerText: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#788eec",
+    },
+    headerLink: {
+        color: '#2e2e2d',
+        fontWeight: "normal",
+        fontSize: 16
     },
     logo: {
         flex: 1,
@@ -41,20 +52,6 @@ export default StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
-    },
-    headerView: {
-        flex: 1,
-        alignItems: "center",
-    },
-    headerText: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#788eec",
-    },
-    headerLink: {
-        color: '#2e2e2d',
-        fontWeight: "normal",
-        fontSize: 16
     },
     footerView: {
         flex: 1,
