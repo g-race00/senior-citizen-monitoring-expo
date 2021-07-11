@@ -103,7 +103,6 @@ export default StyleSheet.create({
         color: '#BD4C55'
     },
     listContainer: {
-        // flex: 1,
         elevation: 1,
         padding: 15,
         borderRadius: 25,
@@ -119,7 +118,6 @@ export default StyleSheet.create({
         backgroundColor: 'white'
     },
     itemBorder: {
-        // backgroundColor: 'white',
         padding: 10,
         borderBottomColor: '#DFDFE6',
         borderBottomWidth: 2,
@@ -145,8 +143,10 @@ export default StyleSheet.create({
         color: '#AAAABC'
     },
     alertContainer: {
-        margin: 20,
-        marginBottom: -10,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 5,
+        marginBottom: 5,
         elevation: 1,
         borderRadius: 25,
         backgroundColor: 'white',
@@ -177,6 +177,9 @@ export default StyleSheet.create({
         fontSize: 15,
         // fontWeight: "bold",
         color: "grey",
+    },
+    alertListContainer: {
+        paddingTop: 5,
     },
     button: {
         padding:8,

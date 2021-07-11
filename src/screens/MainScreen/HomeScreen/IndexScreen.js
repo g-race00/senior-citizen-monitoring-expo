@@ -62,7 +62,7 @@ export default function IndexScreen({navigation}) {
             items[i]['index'] = i;
         }
         return (
-            <View style={ (user.notif.fall && user.notif.sos) ? styles.listFlexContainer : styles.listContainer}>
+            <View style={ [(user.notif.fall && user.notif.sos) ? styles.listFlexContainer : styles.listContainer, {marginTop:(user.notif.fall || user.notif.sos ? 10:20)}]}>
                 <FlatList
                 
                     data={items}
@@ -169,6 +169,39 @@ export default function IndexScreen({navigation}) {
         )
     }
 
+    function renderAlertListItem(item){
+        
+        return (item.alert == "fall" ? <FallView/> : <SosView/>)
+    }
+
+    function AlertListView(){
+        const fall = user.notif.fall;
+        const sos = user.notif.sos;
+        var items = [];
+
+        if(fall !== null && fall !== "" && sos !== null && sos !== ""){
+            items = [fall, sos].sort((a, b) => b.ts - a.ts);
+        } else if (fall !== null && fall !== ""){
+            items = [fall];
+        } else {
+            items = [sos];
+        }
+
+        for(var i = 0; i < items.length; i++){
+            items[i]['index'] = i;
+        }
+
+        return (
+            <View style={styles.alertListContainer}>
+                <FlatList
+                    data={items}
+                    renderItem={({item}) => renderAlertListItem(item)}
+                    keyExtractor={(item) => item.index.toString()}
+                />    
+            </View>
+        )
+    }
+
     /* Get current location API request */
     const getCurLoc = async(user) => {
         let params = {
@@ -187,7 +220,6 @@ export default function IndexScreen({navigation}) {
                         body: JSON.stringify(params)
                     }).then(response => response.json())
                     .then((json) => {
-                        console.log(json)
                         if(json.items.length > 0){
                             const item = json.items[0];
                             const gateway = item.gateway_mac_addr.replace(/:/g, "").toUpperCase();
@@ -265,10 +297,7 @@ export default function IndexScreen({navigation}) {
             </View>
             <FloorplanView/>
             <LiveView />
-            <View>
-                { user.notif.sos ? <SosView/> : <></>}
-                { user.notif.fall ? <FallView/> : <></>}
-            </View>
+            {user.notif.sos || user.notif.fall ? <AlertListView/> : <></>}
             <ListView />
             <TouchableOpacity style={styles.bottomButton} onPress={onEditButtonPress}>
                 <Ionicons name="pencil" color="white" size={25} />
