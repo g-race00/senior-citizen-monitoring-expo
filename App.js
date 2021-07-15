@@ -79,7 +79,31 @@ export default function App() {
           .set({token}, {merge: true})
         user.token = token;
         setUser({ ...user })
-      }
+
+        let params = {
+          userId: user.id,
+          expoToken: user.token,
+          info: user.info,
+          beacon: user.beacon,
+        };
+    
+        await fetch(awsDbAPI.userUpdate + user.id, {
+            credentials: 'include',
+            method: 'POST', 
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        }).then((response) => response.json())
+        .then((json) => {
+            console.log('updated')
+            console.log(json)
+            user.token = json.expoToken
+            setUser({ ...user })
+        })
+          .catch((error)=> console.error(error));
+        }
     }
   
     if (Platform.OS === 'android') {

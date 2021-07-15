@@ -157,8 +157,8 @@ export default function MainScreen(props) {
             let params = {
                 userId: user.id,
                 expoToken: user.token,
-                info: "",
-                beacon: "",
+                info: user.info,
+                beacon: user.beacon,
               };
           
             await fetch(awsDbAPI.userUpdate + user.id, {
