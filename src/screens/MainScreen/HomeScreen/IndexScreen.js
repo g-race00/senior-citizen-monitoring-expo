@@ -33,12 +33,12 @@ export default function IndexScreen({navigation}) {
         getCurLoc(user);
         calc_fall_time(user);
         calc_sos_time(user);
-        const interval = setInterval(() => {
+        setInterval(() => {
             getCurLoc(user);
             calc_fall_time(user);
             calc_sos_time(user);
         }, 60000); 
-        return () => { clearInterval(interval) }
+        return () => {  }
     }, [user])
 
     function renderListItem(item){

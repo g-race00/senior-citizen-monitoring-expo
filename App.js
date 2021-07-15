@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { LoginScreen, RegistrationScreen, MainScreen } from './src/screens'
 import { firebase } from './src/firebase/config'
+import { awsDbAPI } from './src/aws/api';
 
 import { AuthContext } from './src/context/AuthContext'
 import Constants from 'expo-constants';
@@ -18,6 +19,7 @@ if (!global.atob) { global.atob = decode }
 // Ignore AlarmManager in Timing in Android [Caused by API subscription, for both AWS n Google]
 LogBox.ignoreLogs(['Setting a timer']);
 LogBox.ignoreLogs(['expo-permissions']);
+LogBox.ignoreLogs(['Unable to activate keep awake']);
 
 const Stack = createStackNavigator();
 
@@ -82,12 +84,10 @@ export default function App() {
 
         let params = {
           userId: user.id,
-          expoToken: user.token,
-          info: user.info,
-          beacon: user.beacon,
+          expoToken: token,
         };
     
-        await fetch(awsDbAPI.userUpdate + user.id, {
+        await fetch(awsDbAPI.userToken + user.id, {
             credentials: 'include',
             method: 'POST', 
             headers: {
@@ -97,13 +97,11 @@ export default function App() {
             body: JSON.stringify(params)
         }).then((response) => response.json())
         .then((json) => {
-            console.log('updated')
-            console.log(json)
             user.token = json.expoToken
             setUser({ ...user })
         })
-          .catch((error)=> console.error(error));
-        }
+        .catch((error)=> console.error(error));
+      }
     }
   
     if (Platform.OS === 'android') {
