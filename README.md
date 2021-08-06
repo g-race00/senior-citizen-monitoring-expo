@@ -4,3 +4,4 @@
 - It alerts user when fall is detected 
 - Firebase for app authentication
 - AWS for analysing iot data, and firing push notifications
+> other source codes and diagrams are placed in /external folder 
